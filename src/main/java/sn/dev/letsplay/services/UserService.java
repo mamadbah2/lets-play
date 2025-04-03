@@ -1,5 +1,6 @@
 package sn.dev.letsplay.services;
 
-public class UserService {
 
-}
+import sn.dev.letsplay.data.entities.User;
+
+public interface UserService extends CrudService<User> {}
