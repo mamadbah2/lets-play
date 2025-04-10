@@ -10,23 +10,10 @@ import sn.dev.letsplay.data.repositories.UserRepository;
 
 @SpringBootApplication
 @EnableMongoRepositories
-public class LetsPlayApplication implements CommandLineRunner {
-    @Autowired
-    private UserRepository userRepository;
+public class LetsPlayApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(LetsPlayApplication.class, args);
-    }
-
-    @Override
-    public void run(String... args) throws Exception {
-        // This runs AFTER Spring finishes startup
-        User user = new User();
-        user.setRole("Admin");
-        user.setEmail("admin@gmail.com");
-        user.setPassword("passer");
-        user.setName("Zacharia");
-        System.out.println("--------" + userRepository.save(user));
     }
 
 }
