@@ -54,9 +54,11 @@ public class UserControllerImpl extends AbstractCrudController<UserResponse, Use
         return obj.toEntity();
     }
 
+
+
     @Override
     @PostMapping("/login")
-    public ResponseEntity<String> login(@Valid @RequestBody UserRequest userRequest) {
+    public ResponseEntity<String> login( @RequestBody UserRequest userRequest) {
         if (!rateLimiterService.isAllowed(userRequest.getUsername())) {
             return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body("Too Many Request");
         }

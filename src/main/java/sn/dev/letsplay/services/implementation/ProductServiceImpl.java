@@ -35,7 +35,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    @PostAuthorize("hasRole('Admin') or @productAuthConfig.isOwner(#Id, authentication)") // ou soi meme etre le possesseur
+    @PreAuthorize("hasRole('Admin') or @productAuthConfig.isOwner(#Id, authentication)") // ou soi meme etre le possesseur
     public Product update(Product obj, String Id) {
         Product product = getById(Id);
         product.setPrice(obj.getPrice());
@@ -45,7 +45,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    @PostAuthorize("hasRole('Admin') or @productAuthConfig.isOwner(#Id, authentication)")
+    @PreAuthorize("hasRole('Admin') or @productAuthConfig.isOwner(#Id, authentication)")
     public void delete(String Id) {
         if (productRepository.existsById(Id)) {
             productRepository.deleteById(Id);
@@ -55,7 +55,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-//    @PostAuthorize("hasRole('Admin') or #user.username == principal.username")
+    @PreAuthorize("hasRole('Admin') or @userRepository.findById(#user.id).orElse(null)?.username == authentication.name")
     public List<Product> getProductsByUser(User user) {
         return productRepository.getProductsByUserId(user.getId());
     }

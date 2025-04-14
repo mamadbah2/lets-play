@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import sn.dev.letsplay.data.entities.User;
 import sn.dev.letsplay.data.repositories.UserRepository;
+import sn.dev.letsplay.exceptions.ResourceAlreadyExistsException;
 import sn.dev.letsplay.exceptions.ResourceNotFoundException;
 import sn.dev.letsplay.services.JWTService;
 import sn.dev.letsplay.services.UserService;
@@ -28,12 +29,13 @@ public class UserServiceImpl implements UserService {
     private final JWTService jwtService;
 
     @Override
-//    @PreAuthorize("hasRole('Admin')")
+    @PermitAll
     public List<User> getAll() {
         return userRepository.findAll();
     }
 
-    @PostAuthorize("hasRole('Admin') or returnObject.username == #principal.username")// ou se get soi meme
+    @PreAuthorize("hasRole('Admin') or @userRepository.findById(#Id).orElse(null)?.username == authentication.name")// ou se get soi meme
+    @PostAuthorize("returnObject.role == 'ROLE_Admin' or returnObject.role == 'ROLE_User'")
     @Override
     public User getById(String Id) {
         return userRepository.findById(Id)
@@ -45,14 +47,14 @@ public class UserServiceImpl implements UserService {
     public User create(User obj) {
         if (userRepository.existsUserByUsername(obj.getUsername()) ||  userRepository.existsUserByEmail(obj.getEmail())) {
             System.out.println("User already exists");
-            throw new RuntimeException("User already exist");
+            throw new ResourceAlreadyExistsException("User already exists");
         }
         obj.setPassword(encoder.encode(obj.getPassword()));
         return userRepository.save(obj);
     }
 
     @Override
-    @PostAuthorize("hasRole('Admin') or returnObject.username == authentication.name")
+    @PreAuthorize("hasRole('Admin') or @userRepository.findById(#Id).orElse(null)?.username == authentication.name")
     public User update(User obj, String Id) {
 
         User user = userRepository.findById(Id)

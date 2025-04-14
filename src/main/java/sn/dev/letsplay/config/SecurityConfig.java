@@ -55,8 +55,16 @@ public class SecurityConfig extends OncePerRequestFilter {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(apiConfSource()))
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/api/users/login", "/api/users/").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/products/").permitAll()
+                        .requestMatchers(
+                                HttpMethod.GET,
+                                "/api/users/login",
+                                "/api/users/",
+                                "/api/products/**"
+                        ).permitAll()
+                        .requestMatchers(
+                                HttpMethod.POST,
+                                "/api/users/"
+                        ).permitAll()
                         .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())
                 .sessionManagement(session ->

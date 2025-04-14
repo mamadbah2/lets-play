@@ -11,7 +11,6 @@ import sn.dev.letsplay.services.CrudService;
 import sn.dev.letsplay.web.controllers.CrudController;
 
 import java.util.List;
-import java.util.stream.Collector;
 
 public abstract class AbstractCrudController<T, E, POJO> implements CrudController<T, E> {
     protected abstract CrudService<POJO> getService();
