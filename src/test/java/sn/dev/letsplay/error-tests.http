@@ -1,0 +1,138 @@
+### LOGIN - Mauvaises informations d'identification (401 Unauthorized) ✅
+POST https://localhost:8080/api/users/login
+Content-Type: application/json
+
+{
+  "username": "wrongUser",
+  "password": "wrongPassword"
+}
+
+### REGISTER ONE USER - Nom d'utilisateur déjà existant (409 Conflict - basé sur vos logs) ✅
+POST https://localhost:8080/api/users
+Content-Type: application/json
+
+{
+  "username": "Diop",
+  "email": "different@mail.com",
+  "password": "passer",
+  "role": "ROLE_User"
+}
+
+### REGISTER ONE USER - Email déjà existant (peut-être un 409 Conflict ou un 400 Bad Request selon votre validation)
+POST https://localhost:8080/api/users
+Content-Type: application/json
+
+{
+  "username": "NewUser",
+  "email": "diop@gmail.com",
+  "password": "passer",
+  "role": "ROLE_User"
+}
+
+### REGISTER ONE USER - Données manquantes ou invalides (400 Bad Request)
+POST https://localhost:8080/api/users
+Content-Type: application/json
+
+{
+  "email": "invalid-email",
+  "password": "short",
+  "role": "INVALID_ROLE"
+}
+
+### GET ALL USERS - Sans token d'autorisation (401 Unauthorized)
+GET https://localhost:8080/api/users
+Content-Type: application/json
+
+### GET ONE USER - ID utilisateur inexistant (404 Not Found)
+GET https://localhost:8080/api/users/nonExistentId
+Content-Type: application/json
+Authorization: Bearer {{ token }}
+
+### DELETE A USER - ID utilisateur inexistant (404 Not Found)
+DELETE https://localhost:8080/api/users/nonExistentId
+Content-Type: application/json
+Authorization: Bearer {{ token }}
+
+### UPDATE A USER - ID utilisateur inexistant (404 Not Found)
+PUT https://localhost:8080/api/users/nonExistentId
+Content-Type: application/json
+Authorization: Bearer {{ token }}
+
+{
+  "username": "UpdatedUser",
+  "email": "updated@mail.com",
+  "password": "newPass",
+  "role": "ROLE_Admin"
+}
+
+### UPDATE A USER - Données de mise à jour invalides (400 Bad Request - par exemple, email mal formaté)
+PUT https://localhost:8080/api/users/67f5a11cb8f93f66d0a529a8
+Content-Type: application/json
+Authorization: Bearer {{ token }}
+
+{
+  "username": "UpdatedUser",
+  "email": "invalid-email",
+  "password": "newPass",
+  "role": "ROLE_Admin"
+}
+
+### GET ALL PRODUCTS FROM USER - ID utilisateur inexistant (404 Not Found)
+GET https://localhost:8080/api/user/nonExistentId/products
+Content-Type: application/json
+Authorization: Bearer {{ token }}
+
+### GET A PRODUCT - ID produit inexistant (404 Not Found)
+GET https://localhost:8080/api/products/nonExistentProductId
+Content-Type: application/json
+
+### CREATE A PRODUCT - Sans token d'autorisation (401 Unauthorized)
+POST https://localhost:8080/api/products
+Content-Type: application/json
+
+{
+  "name": "Test Product",
+  "description": "A test product",
+  "price": 100.0,
+  "userId": "someUserId"
+}
+
+### CREATE A PRODUCT - Données manquantes ou invalides (400 Bad Request)
+POST https://localhost:8080/api/products
+Content-Type: application/json
+Authorization: Bearer {{ token }}
+
+{
+  "description": "A test product",
+  "price": -50.0,
+  "userId": "someUserId"
+}
+
+### UPDATE A PRODUCT - ID produit inexistant (404 Not Found)
+PUT https://localhost:8080/api/products/nonExistentProductId
+Content-Type: application/json
+Authorization: Bearer {{ token }}
+
+{
+  "name": "Updated Product",
+  "description": "An updated product",
+  "price": 150.0,
+  "userId": "anotherUserId"
+}
+
+### UPDATE A PRODUCT - Données de mise à jour invalides (400 Bad Request - par exemple, prix négatif)
+PUT https://localhost:8080/api/products/67f59dfbb8f93f66d0a529a5
+Content-Type: application/json
+Authorization: Bearer {{ token }}
+
+{
+  "name": "Updated Product",
+  "description": "An updated product",
+  "price": -10.0,
+  "userId": "anotherUserId"
+}
+
+### DELETE A PRODUCT - ID produit inexistant (404 Not Found)
+DELETE https://localhost:8080/api/products/nonExistentProductId
+Content-Type: application/json
+Authorization: Bearer {{ token }}
