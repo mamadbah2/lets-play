@@ -1,10 +1,12 @@
 package sn.dev.letsplay.services.implementation;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import sn.dev.letsplay.exceptions.JwtNotMatchException;
 import sn.dev.letsplay.services.JWTService;
 
 import javax.crypto.KeyGenerator;

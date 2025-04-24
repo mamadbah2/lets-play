@@ -67,20 +67,32 @@ classDiagram
 | Method | Endpoint                  | Description            |
 |--------|---------------------------|------------------------|
 | GET    | `/api/users`              | List all users         |
-| GET    | `/api/users/{id}`         | Get user by ID         |
-| PUT    | `/api/users/{id}`         | Update user            |
 | DELETE | `/api/users/{id}`         | Delete user            |
+
+### 👤 User (Admin + Owner)
+
+| Method | Endpoint                   | Description            |
+|--------|----------------------------|------------------------|
+| GET    | `/api/users/{id}`          | Get user by ID         |
+| PUT    | `/api/users/{id}`          | Update user            |
 | GET    | `/api/users/{id}/products` | Get product by user ID |
+| PUT    | `/api/products/{id}`       | Update product         |
+| DELETE | `/api/products/{id}`       | Delete product         |
+
+
+### 📦 Product (Non-Authenticated users)
+
+| Method | Endpoint             | Description                |
+|--------|----------------------|----------------------------|
+| GET    | `/api/products`      | List all products (public) |
+| GET    | `/api/products/{id}` | Get product by ID          |
+
 
 ### 📦 Product (Authenticated users)
 
-| Method | Endpoint                  | Description            |
-|--------|---------------------------|------------------------|
-| GET    | `/api/products`           | List all products (public) |
-| POST   | `/api/products`           | Create new product     |
-| GET    | `/api/products/{id}`      | Get product by ID      |
-| PUT    | `/api/products/{id}`      | Update product         |
-| DELETE | `/api/products/{id}`      | Delete product         |
+| Method | Endpoint             | Description                |
+|--------|----------------------|----------------------------|
+| POST   | `/api/products`      | Create new product         |
 
 ---
 

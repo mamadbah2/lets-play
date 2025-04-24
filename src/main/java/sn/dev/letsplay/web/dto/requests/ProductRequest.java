@@ -14,15 +14,12 @@ public class ProductRequest {
     private String description;
     @Min(value = 0, message = "price cannot be negative")
     private double price;
-    @NotBlank(message = "userId cannot be blank")
-    private String userId;
 
     public Product toEntity() {
         Product p = new Product();
         p.setDescription(this.description);
         p.setName(this.name);
         p.setPrice(this.price);
-        p.setUserId(this.userId);
         return p;
     }
 }

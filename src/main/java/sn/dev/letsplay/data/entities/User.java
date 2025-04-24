@@ -21,4 +21,13 @@ public class User {
     private String email;
     private String password;
     private String role;
+
+    public void setRole(String role) {
+        if (role != null) {
+            if (role.contains("ROLE_Admin") || role.contains("ROLE_User")) this.role = role;
+        } else {
+            this.role = "ROLE_User";
+        }
+
+    }
 }

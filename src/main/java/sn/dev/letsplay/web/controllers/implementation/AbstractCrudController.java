@@ -22,7 +22,7 @@ public abstract class AbstractCrudController<T, E, POJO> implements CrudControll
     protected abstract POJO mapDtoToPovo(E obj);
 
     @Override
-    @GetMapping("/")
+    @GetMapping("")
     public CollectionModel<EntityModel<T>> getAll() {
         List<POJO> all = getService().getAll();
         List<T> resp = all.stream().map(this::mapPovoToDto).toList();
@@ -41,7 +41,7 @@ public abstract class AbstractCrudController<T, E, POJO> implements CrudControll
     }
 
     @Override
-    @PostMapping("/")
+    @PostMapping("")
     public ResponseEntity<T> create(@Valid @RequestBody E obj) {
         POJO data = mapDtoToPovo(obj);
         POJO createdData = getService().create(data);

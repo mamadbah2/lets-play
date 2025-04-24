@@ -7,6 +7,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import sn.dev.letsplay.data.entities.User;
@@ -18,6 +22,7 @@ import sn.dev.letsplay.services.UserService;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -50,6 +55,7 @@ public class UserServiceImpl implements UserService {
             throw new ResourceAlreadyExistsException("User already exists");
         }
         obj.setPassword(encoder.encode(obj.getPassword()));
+        obj.setRole("ROLE_User");
         return userRepository.save(obj);
     }
 
@@ -63,12 +69,22 @@ public class UserServiceImpl implements UserService {
         user.setUsername(obj.getUsername());
         user.setEmail(obj.getEmail());
         user.setPassword(encoder.encode(obj.getPassword()));
-        user.setRole(obj.getRole());
+
+        // Only admin profil can update this role
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            boolean isAdmin = authentication.getAuthorities().stream().map(
+                    GrantedAuthority::getAuthority
+            ).anyMatch(role -> role.contains("Admin"));
+            if (isAdmin) user.setRole(obj.getRole());
+            else System.out.println("Non Admin user want update his role");
+        }
+
         return userRepository.save(user);
     }
 
     @Override
-    @PreAuthorize("hasRole('Admin')")
+    @PreAuthorize("hasRole('Admin') and !(@userRepository.findById(#Id).orElse(null)?.username == authentication.name)")
     public void delete(String Id) {
         if (userRepository.existsById(Id)) {
             userRepository.deleteById(Id);

@@ -8,19 +8,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -57,15 +54,35 @@ public class SecurityConfig extends OncePerRequestFilter {
                 .authorizeHttpRequests(request -> request
                         .requestMatchers(
                                 HttpMethod.GET,
-                                "/api/users/login",
-                                "/api/users/",
                                 "/api/products/**"
                         ).permitAll()
                         .requestMatchers(
                                 HttpMethod.POST,
-                                "/api/users/"
+                                "/api/users/login",
+                                "/api/users"
                         ).permitAll()
-                        .anyRequest().authenticated())
+                        .requestMatchers(
+                                HttpMethod.GET,
+                                "/api/users",
+                                "/api/users/{id}",
+                                "/api/users/{id}/products"
+                        ).authenticated()
+                        .requestMatchers(
+                                HttpMethod.POST,
+                                "/api/products"
+                        ).authenticated()
+                        .requestMatchers(
+                                HttpMethod.PUT,
+                                "/api/users/{id}",
+                                "api/products/{id}"
+                        ).authenticated()
+                        .requestMatchers(
+                                HttpMethod.DELETE,
+                                "/api/users/{id}",
+                                "api/products/{id}"
+                        ).authenticated()
+                        .anyRequest().permitAll()
+                )
                 .httpBasic(Customizer.withDefaults())
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

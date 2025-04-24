@@ -1,0 +1,8 @@
+login - corrected
+Exception bad request when we modify format json - corrected / perhaps
+UserId integrity when you create product - corrected
+Only admin can create
+
+Mauvais
+Approche optimale des le debut
+Trop d'appel au repository
